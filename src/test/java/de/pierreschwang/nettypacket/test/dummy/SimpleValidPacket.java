@@ -40,4 +40,9 @@ public class SimpleValidPacket extends Packet {
 
     }
 
+    @Override
+    public int getPacketId() {
+        return 1;
+    }
+
 }

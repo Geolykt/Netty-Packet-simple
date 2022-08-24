@@ -23,7 +23,6 @@
 package de.pierreschwang.nettypacket.test.net;
 
 import de.pierreschwang.nettypacket.event.EventRegistry;
-import de.pierreschwang.nettypacket.exception.PacketRegistrationException;
 import de.pierreschwang.nettypacket.handler.PacketChannelInboundHandler;
 import de.pierreschwang.nettypacket.handler.PacketDecoder;
 import de.pierreschwang.nettypacket.handler.PacketEncoder;
@@ -74,7 +73,7 @@ public class SimpleNettyServer extends ChannelInitializer<Channel> {
     @Override
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline()
-                .addLast(new PacketDecoder(packetRegistry), new PacketEncoder(packetRegistry), new PacketChannelInboundHandler(eventRegistry));
+                .addLast(new PacketDecoder(packetRegistry), new PacketEncoder(), new PacketChannelInboundHandler(eventRegistry));
         new RespondingPacket<>(new SimpleValidPacket(), SimpleStringPacket.class, simpleStringPacket -> {
             System.out.println(simpleStringPacket.getData());
         }).send(channel);

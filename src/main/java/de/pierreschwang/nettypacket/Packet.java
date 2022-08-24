@@ -25,14 +25,16 @@ package de.pierreschwang.nettypacket;
 import de.pierreschwang.nettypacket.io.Decoder;
 import de.pierreschwang.nettypacket.io.Encoder;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Packet implements Encoder, Decoder {
+
+    private static final AtomicLong NEXT_SESSION_ID = new AtomicLong();
 
     /**
      * SessionID is used for identification of the packet for use with {@link de.pierreschwang.nettypacket.io.Responder}
      */
-    private long sessionId = ThreadLocalRandom.current().nextLong();
+    private long sessionId = NEXT_SESSION_ID.getAndIncrement();
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
@@ -41,4 +43,6 @@ public abstract class Packet implements Encoder, Decoder {
     public long getSessionId() {
         return sessionId;
     }
+
+    public abstract int getPacketId();
 }

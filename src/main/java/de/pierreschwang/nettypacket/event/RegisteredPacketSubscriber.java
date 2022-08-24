@@ -38,6 +38,7 @@ public class RegisteredPacketSubscriber {
 
     private final Map<Class<? extends Packet>, Set<InvokableEventMethod>> handler = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
     public RegisteredPacketSubscriber(Object subscriberClass) {
         for (Method method : subscriberClass.getClass().getDeclaredMethods()) {
             if (!method.isAnnotationPresent(PacketSubscriber.class)) {

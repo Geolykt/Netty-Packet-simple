@@ -22,10 +22,11 @@
 
 package de.pierreschwang.nettypacket.test;
 
+import de.pierreschwang.nettypacket.Packet;
+import de.pierreschwang.nettypacket.buffer.PacketBuffer;
 import de.pierreschwang.nettypacket.exception.PacketRegistrationException;
 import de.pierreschwang.nettypacket.registry.IPacketRegistry;
 import de.pierreschwang.nettypacket.registry.SimplePacketRegistry;
-import de.pierreschwang.nettypacket.test.dummy.DummyInvalidPacket;
 import de.pierreschwang.nettypacket.test.dummy.SimpleValidPacket;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class RegistryTest {
+
+    private static class Packet1337 extends Packet {
+
+        @Override
+        public void write(PacketBuffer buffer) {
+        }
+
+        @Override
+        public void read(PacketBuffer buffer) {
+        }
+
+        @Override
+        public int getPacketId() {
+            return 1337;
+        }
+    }
 
     private IPacketRegistry registry;
 
@@ -45,46 +62,32 @@ public class RegistryTest {
     }
 
     @Test
-    @DisplayName("If the passed packet does not contain an empty constructor, a PacketRegistrationException must be thrown")
-    void invalidPacketConstructorShouldThrowException() {
-        Assertions.assertThrows(PacketRegistrationException.class, () ->
-                this.registry.registerPacket(1, DummyInvalidPacket.class));
-    }
-
-    @Test
-    @DisplayName("If the passed packet id is negative - and therefore invalid - a PacketRegistrationException must be thrown")
-    void invalidPacketId() {
-        Assertions.assertThrows(PacketRegistrationException.class, () ->
-                this.registry.registerPacket(-1, DummyInvalidPacket.class));
-    }
-
-    @Test
     @DisplayName("If the passed packet id is already in use - and therefore invalid - a PacketRegistrationException must be thrown")
     void duplicatePacketId() {
         Assertions.assertThrows(PacketRegistrationException.class, () -> {
-            this.registry.registerPacket(1, SimpleValidPacket.class);
-            this.registry.registerPacket(1, SimpleValidPacket.class);
+            this.registry.registerPacket(1, SimpleValidPacket::new);
+            this.registry.registerPacket(1, SimpleValidPacket::new);
         });
     }
 
     @Test
-    @DisplayName("getPacketId() should return -1 if the passed class is not a registered packet")
-    void getPacketIdShouldReturnMinusOneIfNotPresent() {
-        Assertions.assertEquals(-1, this.registry.getPacketId(SimpleValidPacket.class));
+    @DisplayName("constructPacket() should return null if the passed id does not belong to a registered packet")
+    void constructUnregisteredPacket() {
+        Assertions.assertNull(this.registry.constructPacket(100));
     }
 
     @Test
     @DisplayName("getPacketId() should return the matching id if the packet is registered")
     void getPacketIdShouldReturnMatchingIdOfPacketClass() throws PacketRegistrationException {
-        this.registry.registerPacket(1337, SimpleValidPacket.class);
-        Assertions.assertEquals(1337, this.registry.getPacketId(SimpleValidPacket.class));
+        this.registry.registerPacket(1337, Packet1337::new);
+        Assertions.assertEquals(1337, this.registry.constructPacket(1337).getPacketId());
     }
 
     @Test
     @DisplayName("containsPacketId(int) should return true if a packet with the passed id is registered - otherwise false")
     void containsPacketIdShouldReturnCorrectBoolValue() throws PacketRegistrationException {
-        this.registry.registerPacket(1337, SimpleValidPacket.class);
-        Assertions.assertTrue(this.registry.containsPacketId(1337));
-        Assertions.assertFalse(this.registry.containsPacketId(1338));
+        this.registry.registerPacket(1337, Packet1337::new);
+        Assertions.assertTrue(this.registry.isRegistered(1337));
+        Assertions.assertFalse(this.registry.isRegistered(1338));
     }
 }

@@ -33,8 +33,8 @@ public class NetClientLauncher {
 
     public static void main(String[] args) throws PacketRegistrationException {
         IPacketRegistry packetRegistry = new SimplePacketRegistry();
-        packetRegistry.registerPacket(1, new SimpleValidPacket());
-        packetRegistry.registerPacket(2, new SimpleStringPacket());
+        packetRegistry.registerPacket(1, SimpleValidPacket::new);
+        packetRegistry.registerPacket(2, SimpleStringPacket::new);
 
         new SimpleNettyClient(packetRegistry, future1 -> {
             System.out.println("Client running");

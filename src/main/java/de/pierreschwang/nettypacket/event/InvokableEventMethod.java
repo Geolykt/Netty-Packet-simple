@@ -29,7 +29,6 @@ import io.netty.channel.ChannelHandlerContext;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 
 public class InvokableEventMethod {
 

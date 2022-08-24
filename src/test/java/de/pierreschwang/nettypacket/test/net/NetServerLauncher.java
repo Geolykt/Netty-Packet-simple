@@ -32,8 +32,8 @@ public class NetServerLauncher {
 
     public static void main(String[] args) throws PacketRegistrationException {
         IPacketRegistry packetRegistry = new SimplePacketRegistry();
-        packetRegistry.registerPacket(1, new SimpleValidPacket());
-        packetRegistry.registerPacket(2, new SimpleStringPacket());
+        packetRegistry.registerPacket(1, SimpleValidPacket::new);
+        packetRegistry.registerPacket(2, SimpleStringPacket::new);
 
         new SimpleNettyServer(packetRegistry, future -> {
             System.out.println("Server running");

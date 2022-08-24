@@ -49,4 +49,9 @@ public class SimpleStringPacket extends Packet {
     public String getData() {
         return data;
     }
+
+    @Override
+    public int getPacketId() {
+        return 2;
+    }
 }

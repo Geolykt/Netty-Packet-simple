@@ -24,7 +24,6 @@ package de.pierreschwang.nettypacket.test.net;
 
 import de.pierreschwang.nettypacket.event.EventRegistry;
 import de.pierreschwang.nettypacket.event.PacketSubscriber;
-import de.pierreschwang.nettypacket.exception.PacketRegistrationException;
 import de.pierreschwang.nettypacket.handler.PacketChannelInboundHandler;
 import de.pierreschwang.nettypacket.handler.PacketDecoder;
 import de.pierreschwang.nettypacket.handler.PacketEncoder;
@@ -76,7 +75,7 @@ public class SimpleNettyClient extends ChannelInitializer<Channel> {
     protected void initChannel(Channel channel) throws Exception {
         // Add the PacketChannelInboundHandler if you want to use the event functionality
         channel.pipeline()
-                .addLast(new PacketDecoder(packetRegistry), new PacketEncoder(packetRegistry), new PacketChannelInboundHandler(eventRegistry));
+                .addLast(new PacketDecoder(packetRegistry), new PacketEncoder(), new PacketChannelInboundHandler(eventRegistry));
     }
 
     @PacketSubscriber

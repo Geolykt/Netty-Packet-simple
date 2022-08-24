@@ -22,21 +22,16 @@
 
 package de.pierreschwang.nettypacket.registry;
 
+import java.util.function.Supplier;
+
 import de.pierreschwang.nettypacket.Packet;
 import de.pierreschwang.nettypacket.exception.PacketRegistrationException;
 
-import java.lang.reflect.InvocationTargetException;
-
 public interface IPacketRegistry {
 
-    void registerPacket(int packetId, Packet packet) throws PacketRegistrationException;
+    void registerPacket(int packetId, Supplier<? extends Packet> packetSupplier) throws PacketRegistrationException;
 
-    void registerPacket(int packetId, Class<? extends Packet> packet) throws PacketRegistrationException;
+    <T extends Packet> T constructPacket(int packetId);
 
-    int getPacketId(Class<? extends Packet> packetClass);
-
-    <T extends Packet> T constructPacket(int packetId) throws InvocationTargetException, InstantiationException, IllegalAccessException;
-
-    boolean containsPacketId(int id);
-
+    boolean isRegistered(int id);
 }

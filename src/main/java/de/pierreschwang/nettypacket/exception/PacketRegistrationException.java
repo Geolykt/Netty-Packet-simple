@@ -22,6 +22,7 @@
 
 package de.pierreschwang.nettypacket.exception;
 
+@SuppressWarnings("serial")
 public class PacketRegistrationException extends Exception {
 
     /**
@@ -48,7 +49,6 @@ public class PacketRegistrationException extends Exception {
      *                {@link #getCause()} method).  (A <tt>null</tt> value is
      *                permitted, and indicates that the cause is nonexistent or
      *                unknown.)
-     * @since 1.4
      */
     public PacketRegistrationException(String message, Throwable cause) {
         super(message, cause);
