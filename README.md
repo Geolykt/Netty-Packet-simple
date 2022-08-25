@@ -1,3 +1,8 @@
+I have found this library to be insufficent as it does not provide the length of the message as well as having to do even more logic with netty.
+In the end I ended up writing my own packet library which is actually less hard that I first assumed.
+
+---
+
 # Minimalistic Netty-Packet library
 
 - Create packets with ease
